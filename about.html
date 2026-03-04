@@ -121,6 +121,57 @@
     .about-cta h2 span { color: #2563EB; font-style: italic; }
     .about-cta p { color: #CBD5E1; margin: 1rem auto 2rem; max-width: 520px; }
 
+
+    /* ── CURRENT WORK ── */
+    #current-work { background: #F8FAFC; padding: 7rem 5%; }
+    .cw-inner { max-width: 1100px; margin: 0 auto; }
+    #current-work .eyebrow { color: #2563EB; }
+    .cw-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .cw-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(37,99,235,0.12);
+      padding: 2rem;
+      border-radius: 2px;
+      display: flex; flex-direction: column; gap: 0.8rem;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+    .cw-card:hover {
+      border-color: #2563EB;
+      box-shadow: 0 8px 30px rgba(37,99,235,0.1);
+      transform: translateY(-3px);
+    }
+    .cw-badge {
+      width: 44px; height: 44px;
+      background: #EFF6FF; border: 1px solid rgba(37,99,235,0.15);
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 10px; flex-shrink: 0;
+    }
+    .cw-tag {
+      display: inline-block;
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #2563EB;
+      background: #EFF6FF; border: 1px solid #BFDBFE;
+      padding: 0.2rem 0.6rem; border-radius: 100px;
+      width: fit-content;
+    }
+    .cw-card h4 {
+      font-family: 'Raleway', sans-serif;
+      font-size: 1.1rem; color: #0F172A; font-weight: 700; margin: 0;
+    }
+    .cw-card p {
+      font-size: 0.87rem; color: #334155; line-height: 1.7; margin: 0; flex-grow: 1;
+    }
+    .cw-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.4rem; }
+    .cw-chips span {
+      font-size: 0.65rem; letter-spacing: 0.06em;
+      background: #F1F5F9; border: 1px solid rgba(15,23,42,0.08);
+      color: #475569; padding: 0.2rem 0.55rem; border-radius: 2px;
+    }
+    @media (max-width: 900px) { .cw-grid { grid-template-columns: 1fr; } }
+
     @media (max-width: 900px) {
       .bio-grid { grid-template-columns: 1fr; }
       .bio-aside { position: static; }
@@ -223,6 +274,54 @@
   </div>
 </section>
 
+<!-- CURRENT WORK -->
+<section id="current-work">
+  <div class="cw-inner">
+    <span class="eyebrow">Currently Working On</span>
+    <h2 style="color:#0F172A;">Active <span style="color:#2563EB;font-style:italic;">Projects</span></h2>
+    <div class="divider" style="background:linear-gradient(90deg,#2563EB,transparent);"></div>
+    <div class="cw-grid">
+
+      <div class="cw-card fade-up">
+        <div class="cw-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="cw-tag">AI-Powered SaaS</div>
+        <h4>PWA Builder Platform</h4>
+        <p>Building an AI-powered SaaS application that transforms frontend web experiences into fully installable applications. Responsibilities span store setup, app configuration, testing, debugging, and performance optimization — ensuring a seamless end-to-end user experience.</p>
+        <div class="cw-chips">
+          <span>AI/ML</span><span>SaaS</span><span>PWA</span><span>Performance Testing</span><span>Debugging</span>
+        </div>
+      </div>
+
+      <div class="cw-card fade-up">
+        <div class="cw-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="cw-tag" style="background:#F5F3FF;color:#7C3AED;border-color:#DDD6FE;">AI/ML Platform</div>
+        <h4>Startup Collaboration</h4>
+        <p>Collaborating closely with a growing startup team to refine features, resolve merchant issues, and deliver scalable solutions aligned with customer needs and business growth — all within a fast-moving, early-stage environment.</p>
+        <div class="cw-chips">
+          <span>Startup</span><span>Agile</span><span>Merchant Support</span><span>Feature Validation</span>
+        </div>
+      </div>
+
+      <div class="cw-card fade-up">
+        <div class="cw-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="cw-tag" style="background:#ECFEFF;color:#0891B2;border-color:#A5F3FC;">AI/ML QA</div>
+        <h4>AI/ML Platform Validation</h4>
+        <p>Supporting validation and enhancement of AI/ML platforms — improving functionality, user experience, and overall product performance. Working hands-on in a fast-moving environment to ensure these cutting-edge tools meet quality and reliability standards.</p>
+        <div class="cw-chips">
+          <span>AI Validation</span><span>UX Testing</span><span>Performance</span><span>Early-Stage</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- EXPERTISE -->
 <section id="expertise">
   <div class="expertise-inner">
@@ -239,6 +338,8 @@
           <span class="exp-tag">Web APIs</span>
           <span class="exp-tag">REST</span>
           <span class="exp-tag">SQL</span>
+          <span class="exp-tag">AI/ML</span>
+          <span class="exp-tag">SaaS</span>
         </div>
       </div>
       <div class="exp-card fade-up">
@@ -260,6 +361,7 @@
           <span class="exp-tag">Database</span>
           <span class="exp-tag">Desktop</span>
           <span class="exp-tag">Cloud</span>
+          <span class="exp-tag">PWA</span>
         </div>
       </div>
       <div class="exp-card fade-up">
