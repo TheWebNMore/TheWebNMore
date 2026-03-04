@@ -11,7 +11,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css?v=20250305"/>
   <!-- Google reCAPTCHA v2 -->
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <!-- Invisible reCAPTCHA: silent verification, no checkbox shown to user -->
   <style>
 
@@ -343,12 +342,8 @@
           <textarea name="description" id="description" placeholder="Briefly describe what needs to be tested, your tech stack, and your goals..." required></textarea>
         </div>
 
-        <button type="submit"
-          class="btn-submit"
-          id="submit-btn">Send &amp; Book Free Consultation</button>
+        <button type="submit" class="btn-submit" id="submit-btn">Send &amp; Book Free Consultation</button>
         <p class="form-note">🔒 Your details are sent securely and privately.</p>
-        <!-- Invisible reCAPTCHA widget container -->
-        <div id="recaptcha-container"></div>
       </form>
     </div>
 
@@ -498,13 +493,11 @@
     }
   }
 
-  // ── FORM & CAPTCHA FLOW ──
-  let pendingFormData = null;
-
+  // ── FORM SUBMIT FLOW ──
   function handleSubmit(e) {
     e.preventDefault();
 
-    // Validate required fields first
+    // Validate required fields
     const fields = ['fname','lname','email','service','description'];
     let valid = true;
     fields.forEach(id => {
@@ -521,91 +514,49 @@
       return;
     }
 
-    // Show the popup immediately in "Verifying" state
-    // Invisible reCAPTCHA fires automatically via the button's data-callback
-    pendingFormData = new FormData(document.getElementById('contact-form'));
-    showState('captcha');
-    document.getElementById('captcha-overlay').classList.add('active');
-    // Programmatically trigger invisible reCAPTCHA
-    if (window.grecaptcha) {
-      try {
-        // Render widget if not already rendered
-        if (!window._recaptchaWidgetId && window._recaptchaWidgetId !== 0) {
-          window._recaptchaWidgetId = grecaptcha.render('recaptcha-container', {
-            sitekey: '6LdV9X8sAAAAAGXDPbquKTH_2B1Sq5Mtvo7tYAkD',
-            size: 'invisible',
-            callback: onCaptchaPassed,
-            'expired-callback': onCaptchaExpired
-          });
-        }
-        grecaptcha.execute(window._recaptchaWidgetId);
-      } catch(err) {
-        console.error('reCAPTCHA error:', err);
-        onCaptchaPassed('fallback-token');
-      }
-    } else {
-      // reCAPTCHA not loaded - submit anyway
-      onCaptchaPassed('no-recaptcha-token');
-    }
-  }
+    // Show sending popup
+    const overlay = document.getElementById('captcha-overlay');
+    document.getElementById('state-captcha').style.display = 'none';
+    document.getElementById('state-sending').style.display = 'flex';
+    document.getElementById('state-success').style.display = 'none';
+    document.getElementById('captcha-cancel-btn').style.display = 'none';
+    overlay.classList.add('active');
 
-  function showState(state) {
-    document.getElementById('state-captcha').style.display  = state === 'captcha'  ? 'block' : 'none';
-    document.getElementById('state-sending').style.display  = state === 'sending'  ? 'flex'  : 'none';
-    document.getElementById('state-success').style.display  = state === 'success'  ? 'flex'  : 'none';
-    document.getElementById('captcha-cancel-btn').style.display = state === 'captcha' ? 'inline-block' : 'none';
+    // Submit to Formspree
+    const formData = new FormData(document.getElementById('contact-form'));
+    fetch('https://formspree.io/f/xkovdedv', {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(res => {
+      if (res.ok) {
+        document.getElementById('state-sending').style.display = 'none';
+        document.getElementById('state-success').style.display = 'flex';
+        setTimeout(() => {
+          overlay.classList.remove('active');
+          document.getElementById('contact-form').reset();
+          document.getElementById('state-sending').style.display = 'none';
+          document.getElementById('state-success').style.display = 'none';
+          document.getElementById('state-captcha').style.display = 'block';
+          document.getElementById('contact-main').scrollIntoView({ behavior: 'smooth' });
+        }, 2500);
+      } else {
+        overlay.classList.remove('active');
+        alert('Something went wrong. Please try again.');
+      }
+    })
+    .catch(() => {
+      overlay.classList.remove('active');
+      alert('Network error. Please check your connection and try again.');
+    });
   }
 
   function closeCaptcha() {
     document.getElementById('captcha-overlay').classList.remove('active');
-    // Reset reCAPTCHA widget so it's fresh next time
-    if (window.grecaptcha && window._recaptchaWidgetId !== undefined) {
-      try { grecaptcha.reset(window._recaptchaWidgetId); } catch(e) {}
-    }
-    pendingFormData = null;
-    showState('captcha');
   }
 
-  // Called automatically by reCAPTCHA when user checks the box
-  async function onCaptchaPassed(token) {
-    showState('sending');
-
-    // Append the reCAPTCHA token so Formspree can verify it
-    pendingFormData.append('g-recaptcha-response', token);
-
-    try {
-      const res = await fetch('https://formspree.io/f/xkovdedv', {
-        method: 'POST',
-        body: pendingFormData,
-        headers: { 'Accept': 'application/json' }
-      });
-
-      if (res.ok) {
-        showState('success');
-        // After 2.5s: close popup, reset form, scroll back to top of form
-        setTimeout(() => {
-          document.getElementById('captcha-overlay').classList.remove('active');
-          document.getElementById('contact-form').reset();
-          showState('captcha');
-          document.getElementById('contact-main').scrollIntoView({ behavior: 'smooth' });
-        }, 2500);
-      } else {
-        closeCaptcha();
-        alert('Something went wrong sending your message. Please try again.');
-      }
-    } catch (err) {
-      closeCaptcha();
-      alert('Network error. Please check your connection and try again.');
-    }
-  }
-
-  function onCaptchaExpired() {
-    if (window.grecaptcha && window._recaptchaWidgetId !== undefined) {
-      try { grecaptcha.reset(window._recaptchaWidgetId); } catch(e) {}
-    }
-  }
-
-  // Close popup by clicking the dark backdrop
+  // Close popup by clicking backdrop
   document.getElementById('captcha-overlay').addEventListener('click', function(e) {
     if (e.target === this) closeCaptcha();
   });
