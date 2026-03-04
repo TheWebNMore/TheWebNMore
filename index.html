@@ -45,116 +45,7 @@
     }
     .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
 
-    /* ── INTERACTIVE PIPELINE ── */
-    .pipeline-wrap {
-      margin-top: 3.5rem; position: relative; z-index: 1; width: 100%;
-      max-width: 900px; margin-left: auto; margin-right: auto;
-    }
-
-    /* Tab row */
-    .pipeline {
-      display: grid; grid-template-columns: repeat(6, 1fr);
-      gap: 0; border-radius: 12px; overflow: hidden;
-      box-shadow: 0 4px 24px rgba(15,23,42,0.12);
-    }
-
-    .p-step {
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; cursor: pointer;
-      padding: 0.9rem 0.5rem 0.8rem;
-      position: relative; transition: all 0.25s ease;
-      border-right: 1px solid rgba(255,255,255,0.15);
-      text-align: center;
-    }
-    .p-step:last-child { border-right: none; }
-
-    .p-step:nth-child(1) { background: #2563EB; }
-    .p-step:nth-child(2) { background: #0891B2; }
-    .p-step:nth-child(3) { background: #D97B4F; }
-    .p-step:nth-child(4) { background: #4CAF8A; }
-    .p-step:nth-child(5) { background: #7B68C8; }
-    .p-step:nth-child(6) { background: #4A90D9; }
-
-    .p-step:hover { filter: brightness(1.12); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); z-index: 2; }
-    .p-step.active { filter: brightness(1.15); transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.2); z-index: 3; }
-    .p-step.active::after {
-      content: '';
-      position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
-      width: 0; height: 0;
-      border-left: 9px solid transparent;
-      border-right: 9px solid transparent;
-    }
-    .p-step:nth-child(1).active::after { border-top: 8px solid #2563EB; }
-    .p-step:nth-child(2).active::after { border-top: 8px solid #0891B2; }
-    .p-step:nth-child(3).active::after { border-top: 8px solid #D97B4F; }
-    .p-step:nth-child(4).active::after { border-top: 8px solid #4CAF8A; }
-    .p-step:nth-child(5).active::after { border-top: 8px solid #7B68C8; }
-    .p-step:nth-child(6).active::after { border-top: 8px solid #4A90D9; }
-
-    .p-num {
-      width: 22px; height: 22px; border-radius: 50%;
-      background: rgba(255,255,255,0.25);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.62rem; font-weight: 700; color: #FFFFFF;
-      margin-bottom: 0.4rem; flex-shrink: 0;
-    }
-    .p-step.active .p-num { background: rgba(255,255,255,0.45); }
-
-    .p-icon-lg { font-size: 1.1rem; margin-bottom: 0.3rem; }
-
-    .p-label {
-      font-size: 0.55rem; letter-spacing: 0.06em; text-transform: uppercase;
-      font-weight: 700; color: rgba(255,255,255,0.9); line-height: 1.35;
-      white-space: normal; text-align: center;
-    }
-    .p-step.active .p-label { color: #FFFFFF; }
-
-    /* Info card */
-    .pipeline-info {
-      margin-top: 1.5rem;
-      background: #FFFFFF;
-      border-radius: 12px;
-      border: 1px solid rgba(37,99,235,0.12);
-      padding: 1.5rem 2rem;
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 1.4rem;
-      align-items: center;
-      box-shadow: 0 4px 20px rgba(37,99,235,0.07);
-      animation: fadeSlideIn 0.3s ease;
-    }
-    @keyframes fadeSlideIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .pipeline-info-left {
-      display: flex; flex-direction: column; align-items: center;
-      gap: 0.5rem;
-    }
-    .pipeline-info-badge {
-      width: 48px; height: 48px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem;
-    }
-    .pipeline-info-step {
-      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
-      text-transform: uppercase; color: #94A3B8;
-    }
-    .pipeline-info-text { text-align: left; }
-    .pipeline-info-text h4 {
-      font-family: 'Raleway', sans-serif; font-size: 1rem;
-      color: #0F172A; margin-bottom: 0.3rem; font-weight: 700;
-    }
-    .pipeline-info-text p {
-      font-size: 0.85rem; color: #334155; margin: 0; line-height: 1.65;
-    }
-
-    @media (max-width: 700px) {
-      .pipeline { grid-template-columns: repeat(3, 1fr); border-radius: 8px; }
-      .p-icon-lg { display: none; }
-    }
-
-    /* ── TRUST STRIP ── */
+        /* ── TRUST STRIP ── */
     .trust-strip {
       background: #EFF6FF;
       border-top: 1px solid rgba(248,250,252,0.08);
@@ -295,7 +186,7 @@
     }
     @media (max-width: 600px) {
       .services-grid { grid-template-columns: 1fr; }
-      .pipeline { gap: 0.3rem; }
+
       .p-arrow { display: none; }
     }
   </style>
@@ -330,50 +221,7 @@
     <a href="contact.html" class="btn btn-gold">Book Free Consultation</a>
     <a href="services.html" class="btn btn-outline">Explore Services</a>
   </div>
-  <div class="pipeline-wrap">
-    <div class="pipeline">
-      <div class="p-step active" onclick="selectStage(0)">
-        <div class="p-num">1</div>
-        <div class="p-icon-lg">📋</div>
-        <div class="p-label">Planning &amp;<br>Requirements</div>
-      </div>
-      <div class="p-step" onclick="selectStage(1)">
-        <div class="p-num">2</div>
-        <div class="p-icon-lg">🏗️</div>
-        <div class="p-label">System &amp;<br>Architecture</div>
-      </div>
-      <div class="p-step" onclick="selectStage(2)">
-        <div class="p-num">3</div>
-        <div class="p-icon-lg">⚙️</div>
-        <div class="p-label">Implementation<br>&amp; Build</div>
-      </div>
-      <div class="p-step" onclick="selectStage(3)">
-        <div class="p-num">4</div>
-        <div class="p-icon-lg">🔍</div>
-        <div class="p-label">Verification<br>&amp; Testing</div>
-      </div>
-      <div class="p-step" onclick="selectStage(4)">
-        <div class="p-num">5</div>
-        <div class="p-icon-lg">🚀</div>
-        <div class="p-label">Deployment<br>&amp; Release</div>
-      </div>
-      <div class="p-step" onclick="selectStage(5)">
-        <div class="p-num">6</div>
-        <div class="p-icon-lg">🛡️</div>
-        <div class="p-label">Operations &amp;<br>Maintenance</div>
-      </div>
-    </div>
-    <div class="pipeline-info" id="pipeline-info">
-      <div class="pipeline-info-left">
-        <div class="pipeline-info-badge" id="pipeline-badge" style="background:#EFF6FF;">📋</div>
-        <div class="pipeline-info-step" id="pipeline-step">Step 1 of 6</div>
-      </div>
-      <div class="pipeline-info-text">
-        <h4 id="pipeline-title">Planning &amp; Requirements</h4>
-        <p id="pipeline-desc">Defining project scope, gathering requirements, and creating a clear test strategy. This phase sets the foundation — identifying risks, objectives, and success criteria before any code is written.</p>
-      </div>
-    </div>
-  </div>
+
 </section>
 
 <!-- TRUST STRIP -->
