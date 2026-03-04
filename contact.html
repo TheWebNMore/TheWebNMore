@@ -242,6 +242,8 @@
               method="POST"
               onsubmit="handleSubmit(event)">
           <input type="hidden" name="_subject" value="New Consultation Request — TheWebNMore Solutions"/>
+          <!-- Honeypot: hidden from real users, catches bots -->
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off"/>
 
           <div class="form-row">
             <div class="form-group">
@@ -461,11 +463,11 @@
       } else {
         btn.textContent = 'Send & Book Free Consultation';
         btn.disabled = false;
-        alert('Something went wrong. Please try again or email rosaliam.pro@gmail.com directly.');
+        alert('Something went wrong. Please try again or use the contact details on this page.');
       }
     } catch (err) {
       btn.textContent = 'Send & Book Free Consultation';
       btn.disabled = false;
-      alert('Network error. Please email rosaliam.pro@gmail.com directly.');
+      alert('Network error. Please try again shortly.');
     }
   }c
