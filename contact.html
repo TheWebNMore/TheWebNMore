@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css?v=20250305"/>
   <!-- Google reCAPTCHA v2 -->
-  <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <!-- Invisible reCAPTCHA: silent verification, no checkbox shown to user -->
   <style>
 
@@ -264,19 +264,19 @@
 
       <div class="info-cards">
         <div class="info-card">
-          <span class="i-icon">⏱️</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           <div><h5>Consultation</h5><p>Free 30-minute call, no strings attached</p></div>
         </div>
         <div class="info-card">
-          <span class="i-icon">📬</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           <div><h5>Response Time</h5><p>Within 1 business day</p></div>
         </div>
         <div class="info-card">
-          <span class="i-icon">💼</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
           <div><h5>Availability</h5><p>On-demand &amp; ongoing engagements</p></div>
         </div>
         <div class="info-card">
-          <span class="i-icon">💰</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           <div><h5>Pricing</h5><p>Flexible — hourly, project, or retainer</p></div>
         </div>
       </div>
@@ -501,24 +501,11 @@
 
   // ── FORM & CAPTCHA FLOW ──
   let pendingFormData = null;
-  let recaptchaWidgetId = null;
-
-  // Called by reCAPTCHA API once fully loaded (via onload= param in script URL)
-  function onRecaptchaLoad() {
-    recaptchaWidgetId = grecaptcha.render('recaptcha-widget', {
-      sitekey: '6LdV9X8sAAAAAGXDPbquKTH_2B1Sq5Mtvo7tYAkD',
-      size: 'invisible',
-      callback: onCaptchaPassed,
-      'expired-callback': function() {
-        grecaptcha.reset(recaptchaWidgetId);
-      }
-    });
-  }
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    // Validate required fields
+    // Validate required fields first
     const fields = ['fname','lname','email','service','description'];
     let valid = true;
     fields.forEach(id => {
@@ -535,39 +522,43 @@
       return;
     }
 
-    // Store form data and show popup
+    // Show the popup immediately in "Verifying" state
+    // Invisible reCAPTCHA fires automatically via the button's data-callback
     pendingFormData = new FormData(document.getElementById('contact-form'));
     showState('captcha');
     document.getElementById('captcha-overlay').classList.add('active');
-
-    // Execute invisible reCAPTCHA — onCaptchaPassed fires automatically on success
-    if (recaptchaWidgetId !== null) {
-      grecaptcha.execute(recaptchaWidgetId);
+    // Programmatically trigger invisible reCAPTCHA
+    if (window.grecaptcha) {
+      grecaptcha.execute();
     } else {
-      // Fallback: reCAPTCHA not loaded
-      onCaptchaPassed('');
+      // Fallback if reCAPTCHA hasn't loaded (e.g. no site key yet)
+      onCaptchaPassed('no-recaptcha-token');
     }
   }
 
   function showState(state) {
-    document.getElementById('state-captcha').style.display  = state === 'captcha' ? 'block' : 'none';
-    document.getElementById('state-sending').style.display  = state === 'sending' ? 'flex'  : 'none';
-    document.getElementById('state-success').style.display  = state === 'success' ? 'flex'  : 'none';
+    document.getElementById('state-captcha').style.display  = state === 'captcha'  ? 'block' : 'none';
+    document.getElementById('state-sending').style.display  = state === 'sending'  ? 'flex'  : 'none';
+    document.getElementById('state-success').style.display  = state === 'success'  ? 'flex'  : 'none';
     document.getElementById('captcha-cancel-btn').style.display = state === 'captcha' ? 'inline-block' : 'none';
   }
 
   function closeCaptcha() {
     document.getElementById('captcha-overlay').classList.remove('active');
-    if (recaptchaWidgetId !== null) {
-      try { grecaptcha.reset(recaptchaWidgetId); } catch(err) {}
+    // Reset reCAPTCHA widget so it's fresh next time
+    if (window.grecaptcha) {
+      try { grecaptcha.reset(); } catch(e) {}
     }
     pendingFormData = null;
     showState('captcha');
   }
 
+  // Called automatically by reCAPTCHA when user checks the box
   async function onCaptchaPassed(token) {
     showState('sending');
-    if (token) pendingFormData.append('g-recaptcha-response', token);
+
+    // Append the reCAPTCHA token so Formspree can verify it
+    pendingFormData.append('g-recaptcha-response', token);
 
     try {
       const res = await fetch('https://formspree.io/f/xqeyzzzr', {
@@ -578,24 +569,27 @@
 
       if (res.ok) {
         showState('success');
+        // After 2.5s: close popup, reset form, scroll back to top of form
         setTimeout(() => {
           document.getElementById('captcha-overlay').classList.remove('active');
           document.getElementById('contact-form').reset();
           showState('captcha');
-          if (recaptchaWidgetId !== null) {
-            try { grecaptcha.reset(recaptchaWidgetId); } catch(err) {}
-          }
           document.getElementById('contact-main').scrollIntoView({ behavior: 'smooth' });
         }, 2500);
       } else {
-        const data = await res.json().catch(() => ({}));
-        const reason = (data.errors && data.errors.map(e => e.message).join(', ')) || data.error || 'Unknown error';
         closeCaptcha();
-        alert('Submission failed (' + res.status + '): ' + reason);
+        alert('Something went wrong sending your message. Please try again.');
       }
     } catch (err) {
       closeCaptcha();
       alert('Network error. Please check your connection and try again.');
+    }
+  }
+
+  function onCaptchaExpired() {
+    // Token expired — reset so user can try again
+    if (window.grecaptcha) {
+      try { grecaptcha.reset(); } catch(e) {}
     }
   }
 
